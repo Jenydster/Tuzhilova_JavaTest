@@ -2,6 +2,8 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import java.util.List;
 
 public class LoginPage extends BasePage {
     private static final By USERNAME_INPUT = By.id("user-name");
@@ -14,7 +16,7 @@ public class LoginPage extends BasePage {
     }
 
     public void open() {
-        driver.get(BASE_URL); // Теперь используем константу из BasePage
+        driver.get(BASE_URL);
     }
 
     public void login(String username, String password) {
@@ -24,14 +26,20 @@ public class LoginPage extends BasePage {
     }
 
     public String getErrorMessage() {
-        return driver.findElement(ERROR_MESSAGE).getText();
+        // Проверяем, что элемент существует перед получением текста
+        List<WebElement> errorElements = driver.findElements(ERROR_MESSAGE);
+        if (!errorElements.isEmpty() && errorElements.get(0).isDisplayed()) {
+            return errorElements.get(0).getText();
+        }
+        return "";
     }
 
     public boolean isErrorMessageDisplayed() {
-        return !driver.findElements(ERROR_MESSAGE).isEmpty();
+        // Правильная проверка: элемент существует И отображается
+        List<WebElement> errorElements = driver.findElements(ERROR_MESSAGE);
+        return !errorElements.isEmpty() && errorElements.get(0).isDisplayed();
     }
 
-    // Новые методы для отдельных действий
     public void enterUsername(String username) {
         driver.findElement(USERNAME_INPUT).sendKeys(username);
     }

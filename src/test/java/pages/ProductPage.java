@@ -2,6 +2,8 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import java.util.List;
 
 public class ProductPage extends BasePage {
     private static final By PRODUCTS_TITLE = By.cssSelector(".title");
@@ -12,14 +14,20 @@ public class ProductPage extends BasePage {
     }
 
     public boolean isTitlePresent() {
-        return driver.findElement(PRODUCTS_TITLE).isDisplayed();
+        List<WebElement> titleElements = driver.findElements(PRODUCTS_TITLE);
+        return !titleElements.isEmpty() && titleElements.get(0).isDisplayed();
     }
 
     public String getTitle() {
-        return driver.findElement(PRODUCTS_TITLE).getText();
+        List<WebElement> titleElements = driver.findElements(PRODUCTS_TITLE);
+        if (!titleElements.isEmpty() && titleElements.get(0).isDisplayed()) {
+            return titleElements.get(0).getText();
+        }
+        return "";
     }
 
     public boolean isMenuButtonDisplayed() {
-        return driver.findElement(MENU_BUTTON).isDisplayed();
+        List<WebElement> menuElements = driver.findElements(MENU_BUTTON);
+        return !menuElements.isEmpty() && menuElements.get(0).isDisplayed();
     }
 }
