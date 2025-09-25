@@ -3,7 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import java.util.List;
+import org.openqa.selenium.NoSuchElementException;
 
 public class ProductPage extends BasePage {
     private static final By PRODUCTS_TITLE = By.cssSelector(".title");
@@ -14,20 +14,27 @@ public class ProductPage extends BasePage {
     }
 
     public boolean isTitlePresent() {
-        List<WebElement> titleElements = driver.findElements(PRODUCTS_TITLE);
-        return !titleElements.isEmpty() && titleElements.get(0).isDisplayed();
+        try {
+            return driver.findElement(PRODUCTS_TITLE).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     public String getTitle() {
-        List<WebElement> titleElements = driver.findElements(PRODUCTS_TITLE);
-        if (!titleElements.isEmpty() && titleElements.get(0).isDisplayed()) {
-            return titleElements.get(0).getText();
+        try {
+            WebElement titleElement = driver.findElement(PRODUCTS_TITLE);
+            return titleElement.isDisplayed() ? titleElement.getText() : "";
+        } catch (NoSuchElementException e) {
+            return "";
         }
-        return "";
     }
 
     public boolean isMenuButtonDisplayed() {
-        List<WebElement> menuElements = driver.findElements(MENU_BUTTON);
-        return !menuElements.isEmpty() && menuElements.get(0).isDisplayed();
+        try {
+            return driver.findElement(MENU_BUTTON).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }
