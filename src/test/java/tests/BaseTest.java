@@ -1,25 +1,34 @@
-public class BaseTest {import org.openqa.selenium.WebDriver;
+package tests;
+
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import pages.LoginPage;
+import pages.ProductPage;
 
-    public class BaseTest {
-        protected WebDriver browser;
+public class BaseTest {
+    protected WebDriver driver;
+    protected LoginPage loginPage;
+    protected ProductPage productsPage;
 
-        @BeforeMethod
-        public void setup() {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--guest");
-            browser = new ChromeDriver(options);
-            browser.manage().window().maximize();
-        }
+    @BeforeMethod
+    public void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--guest");
+        options.addArguments("--start-maximized");
 
-        @AfterMethod
-        public void tearDown() {
-            if (browser != null) {
-                browser.quit();
-            }
+        driver = new ChromeDriver(options);
+
+        loginPage = new LoginPage(driver);
+        productsPage = new ProductPage(driver);
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
 }

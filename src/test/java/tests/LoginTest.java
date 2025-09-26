@@ -1,52 +1,64 @@
-public class LoginTest {import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+package tests;
+
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.*;
 
-    public class LoginTest extends BaseTest {
+public class LoginTest extends BaseTest {
 
-        @Test
-        public void testSuccessfulLoginWithStandardUser() {
-            // Открываем страницу логина
-            browser.get("https://www.saucedemo.com/");
+    @Test(description = "Проверка успешной авторизации standard_user")
+    public void testSuccessfulLoginWithStandardUser() {
+        loginPage.open();
+        loginPage.login("standard_user", "secret_sauce");
 
-            // Вводим логин и пароль
-            browser.findElement(By.id("user-name")).sendKeys("standard_user");
-            browser.findElement(By.id("password")).sendKeys("secret_sauce");
+        assertTrue(productsPage.isTitlePresent(),
+                "Заголовок страницы продуктов должен отображаться");
+        assertEquals(productsPage.getTitle(), "Products",
+                "Название заголовка не соответствует ожидаемому");
+        assertTrue(productsPage.isMenuButtonDisplayed(),
+                "Кнопка меню должна отображаться после успешного логина");
+    }
 
-            // Нажимаем кнопку Login
-            browser.findElement(By.id("login-button")).click();
+    @Test(description = "Проверка ошибки для locked_out_user")
+    public void testLockedOutUserErrorMessage() {
+        loginPage.open();
+        loginPage.login("locked_out_user", "secret_sauce");
 
-            // Проверяем, что мы успешно залогинились
-            WebElement productsTitle = browser.findElement(By.cssSelector(".title"));
-            assertTrue(productsTitle.isDisplayed());
-            assertEquals(productsTitle.getText(), "Products");
+        assertTrue(loginPage.isErrorMessageDisplayed(),
+                "Сообщение об ошибке должно отображаться");
 
-            // Проверяем наличие кнопки меню (дополнительная проверка)
-            WebElement menuButton = browser.findElement(By.id("react-burger-menu-btn"));
-            assertTrue(menuButton.isDisplayed());
-        }
+        String errorText = loginPage.getErrorMessage();
+        assertTrue(errorText.contains("Sorry, this user has been locked out"),
+                "Текст ошибки должен содержать информацию о блокировке пользователя");
+    }
 
-        @Test
-        public void testLockedOutUserErrorMessage() {
-            // Открываем страницу логина
-            browser.get("https://www.saucedemo.com/");
+    @Test(description = "Проверка ошибки при пустом поле логина")
+    public void testEmptyUsernameErrorMessage() {
+        loginPage.open();
+        // Вводим только пароль, логин оставляем пустым
+        loginPage.enterPassword("secret_sauce");
+        loginPage.clickLogin();
 
-            // Вводим логин заблокированного пользователя
-            browser.findElement(By.id("user-name")).sendKeys("locked_out_user");
-            browser.findElement(By.id("password")).sendKeys("secret_sauce");
+        assertTrue(loginPage.isErrorMessageDisplayed(),
+                "Сообщение об ошибке должно отображаться при пустом логине");
 
-            // Нажимаем кнопку Login
-            browser.findElement(By.id("login-button")).click();
+        String errorText = loginPage.getErrorMessage();
+        assertEquals(errorText, "Epic sadface: Username is required",
+                "Текст ошибки должен требовать ввод username");
+    }
 
-            // Проверяем сообщение об ошибке
-            WebElement errorMessage = browser.findElement(By.cssSelector("[data-test='error']"));
-            assertTrue(errorMessage.isDisplayed());
-            assertTrue(errorMessage.getText().contains("Sorry, this user has been locked out"));
+    @Test(description = "Проверка ошибки при пустом поле пароля")
+    public void testEmptyPasswordErrorMessage() {
+        loginPage.open();
+        // Вводим только логин, пароль оставляем пустым
+        loginPage.enterUsername("standard_user");
+        loginPage.clickLogin();
 
-            // Проверяем, что мы остались на странице логина
-            WebElement loginButton = browser.findElement(By.id("login-button"));
-            assertTrue(loginButton.isDisplayed());
-        }
+        assertTrue(loginPage.isErrorMessageDisplayed(),
+                "Сообщение об ошибке должно отображаться при пустом пароле");
+
+        String errorText = loginPage.getErrorMessage();
+        assertEquals(errorText, "Epic sadface: Password is required",
+                "Текст ошибки должен требовать ввод password");
     }
 }
