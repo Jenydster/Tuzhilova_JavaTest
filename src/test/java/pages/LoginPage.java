@@ -2,8 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
 
 public class LoginPage extends BasePage {
     private static final By USERNAME_INPUT = By.id("user-name");
@@ -26,22 +24,11 @@ public class LoginPage extends BasePage {
     }
 
     public String getErrorMessage() {
-        // Прямой подход - ищем один элемент
-        try {
-            WebElement errorElement = driver.findElement(ERROR_MESSAGE);
-            return errorElement.isDisplayed() ? errorElement.getText() : "";
-        } catch (NoSuchElementException e) {
-            return ""; // Элемента нет - возвращаем пустую строку
-        }
+        return driver.findElement(ERROR_MESSAGE).getText();
     }
 
     public boolean isErrorMessageDisplayed() {
-        // Прямая проверка одного элемента
-        try {
-            return driver.findElement(ERROR_MESSAGE).isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false; // Элемента нет - значит не отображается
-        }
+        return driver.findElement(ERROR_MESSAGE).isDisplayed();
     }
 
     public void enterUsername(String username) {

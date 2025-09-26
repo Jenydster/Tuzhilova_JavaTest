@@ -2,8 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
 
 public class ProductPage extends BasePage {
     private static final By PRODUCTS_TITLE = By.cssSelector(".title");
@@ -14,27 +12,14 @@ public class ProductPage extends BasePage {
     }
 
     public boolean isTitlePresent() {
-        try {
-            return driver.findElement(PRODUCTS_TITLE).isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+        return driver.findElement(PRODUCTS_TITLE).isDisplayed();
     }
 
     public String getTitle() {
-        try {
-            WebElement titleElement = driver.findElement(PRODUCTS_TITLE);
-            return titleElement.isDisplayed() ? titleElement.getText() : "";
-        } catch (NoSuchElementException e) {
-            return "";
-        }
+        return driver.findElement(PRODUCTS_TITLE).getText();
     }
 
     public boolean isMenuButtonDisplayed() {
-        try {
-            return driver.findElement(MENU_BUTTON).isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+        return driver.findElement(MENU_BUTTON).isDisplayed();
     }
 }
