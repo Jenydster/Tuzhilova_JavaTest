@@ -11,7 +11,6 @@ public class ProductPage extends BasePage {
     private static final String ADD_TO_CART_BUTTON_PATTERN =
             "//*[text() ='%s']//ancestor::div[@class='inventory_item']//child::button[text()='Add to cart']";
     private static final By CART_BUTTON = By.cssSelector(".shopping_cart_link");
-
     private static final By MENU_BUTTON = By.id("react-burger-menu-btn");
 
     public boolean isMenuButtonDisplayed() {
@@ -35,13 +34,11 @@ public class ProductPage extends BasePage {
     }
 
     public void addToCart(String goodsName) {
-// By addToCart = By.xpath(String.format(ADD_TO_CART_BUTTON_PATTERN, goodsName));
         By addToCart = By.xpath(ADD_TO_CART_BUTTON_PATTERN.formatted(goodsName));
         driver.findElement(addToCart).click();
     }
 
     public void addToCart(int goodsIndex) {
-        //  By addToCart = By.xpath(ADD_TO_CART_BUTTON_PATTERN(goodsName));
         driver.findElements(ADD_TO_CART_BUTTON).get(goodsIndex).click();
     }
 }

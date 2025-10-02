@@ -9,13 +9,11 @@ import pages.LoginPage;
 import pages.ProductPage;
 import pages.CartPage;
 
-
 public class BaseTest {
     protected WebDriver driver;
     protected LoginPage loginPage;
     protected ProductPage productsPage;
     protected CartPage cartPage;
-
 
     @BeforeMethod
     public void setUp() {
