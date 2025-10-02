@@ -7,11 +7,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import pages.LoginPage;
 import pages.ProductPage;
+import pages.CartPage;
 
 public class BaseTest {
     protected WebDriver driver;
     protected LoginPage loginPage;
     protected ProductPage productsPage;
+    protected CartPage cartPage;
 
     @BeforeMethod
     public void setUp() {
@@ -23,6 +25,7 @@ public class BaseTest {
 
         loginPage = new LoginPage(driver);
         productsPage = new ProductPage(driver);
+        cartPage = new CartPage(driver);
     }
 
     @AfterMethod
